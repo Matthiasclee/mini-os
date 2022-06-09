@@ -1,5 +1,21 @@
 [org 0x7c00]
 
+jmp codestart
+
+db "Matthias Lee"
+
+string1:
+  db "Bootloader started", 0x0d, 0x0a, 0
+string2:
+  db "Configuring registers", 0x0d, 0x0a, 0
+string3:
+  db "Additional sectors loaded successfully", 0
+
+codestart:
+  mov bx, string1
+  call print
+  jmp setup
+
 char:
   db 0
 
@@ -27,7 +43,25 @@ print:
 return:
   ret
 
-exit:
+setup:
+  mov bx, string2
+  call print
+
+  mov ax, 0
+  mov es, ax
+  mov ah, 2
+  mov al, 1
+  mov ch, 0
+  mov cl, 2
+  mov dh, 0
+  mov bx, 0x7e00
+
+continue:
+  int 0x13
+
+  mov bx, string3
+  call print
+  
   jmp $
   times 510-($-$$) db 0
   db 0x55, 0xaa
