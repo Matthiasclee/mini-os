@@ -27,16 +27,16 @@ mainloop:
 continueaftercmd:
   
   mov bx, posinline
-  mov ah, [zero]
+  mov ah, 0
   mov [bx], ah 
   mov bx, prompt
   call print
   mov bx, bufflen
-  mov ah, [zero]
+  mov ah, 0
   mov [bx], ah
 
   mov bx, cmdbuffer - 1
-  mov ah, [zero]
+  mov ah, 0
   
 clearbuffer:
   inc bx
@@ -100,7 +100,7 @@ backspace:
   mov ah, [bufflen]
   mov bx, cmdbuffer
   add bx, [bufflen]
-  mov al, [zero]
+  mov al, 0
   mov [bx], al
   dec ah
   mov bx, bufflen
@@ -234,16 +234,14 @@ cmd3:
 bufflen:
   db 0
 cmdbuffer:
-zero:
-  db 0
-  db "clear", 0
+  db 0, "clear", 0
 posinline:
   db 0
 afterbuffer:
 
 end:
   jmp $
-  times 510-($-$$) db 0
-  ;times 448-($-$$) db 0
-  ;times 62 db 0
+  ;times 510-($-$$) db 0
+  times 448-($-$$) db 0
+  times 62 db 0
   db 0x55, 0xaa
