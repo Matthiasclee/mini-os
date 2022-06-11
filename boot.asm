@@ -64,7 +64,7 @@ readloop:
 
 charpressed:
   mov ah, [bufflen]
-  cmp ah, 10
+  cmp ah, 5
   je readloop
   inc ah
   mov bx, bufflen
@@ -224,9 +224,9 @@ prompt:
 newline:
   db 0x0d, 0x0a, 0
 badcmd:
-  db "Bad command", 0
+  db "Err", 0
 helptxt:
-  db "Commands", 0x0d, 0x0a, "clear", 0x0d, 0x0a, "btc", 0
+  db "Commands", 0x0d, 0x0a, "clear", 0x0d, 0x0a, "btc", 0x0d, 0x0a, "help", 0
 btcaddr:
   db "1Q4Ba61mT7C6EtMRSyDj6HSxPsxXkgLPU3", 0
 cmd3:
@@ -236,14 +236,14 @@ bufflen:
 cmdbuffer:
 zero:
   db 0
-  db "clear"
-  times 6 db 0
+  db "clear", 0
 posinline:
   db 0
 afterbuffer:
 
 end:
   jmp $
-  times 448-($-$$) db 0
-  times 62 db 0
+  times 510-($-$$) db 0
+  ;times 448-($-$$) db 0
+  ;times 62 db 0
   db 0x55, 0xaa
