@@ -9,6 +9,10 @@ mainloop:
   call print
   mov dh, 0
   mov cx, cmdbuffer + 1
+  mov bx, string1 + 2
+  call checkifequal
+  je continueaftercmd
+  mov cx, cmdbuffer + 1
   mov bx, cmd1
   call checkifequal
   cmp dh, 1
@@ -226,9 +230,10 @@ newline:
 badcmd:
   db "Err", 0
 helptxt:
-  db "Commands", 0x0d, 0x0a, "clear", 0x0d, 0x0a, "btc", 0x0d, 0x0a, "help", 0
+  db "CMDs", 0x0d, 0x0a, "clear", 0x0d, 0x0a, "btc", 0x0d, 0x0a, "help", 0
 btcaddr:
   db "1Q4Ba61mT7C6EtMRSyDj6HSxPsxXkgLPU3", 0
+  db 0
 cmd3:
   db "btc", 0
 bufflen:
@@ -242,6 +247,6 @@ afterbuffer:
 end:
   jmp $
   ;times 510-($-$$) db 0
-  times 448-($-$$) db 0
-  times 62 db 0
+  times 446-($-$$) db 0
+  times 64 db 0
   db 0x55, 0xaa
