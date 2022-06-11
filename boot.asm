@@ -35,9 +35,7 @@ continueaftercmd:
   mov [bx], ah 
   mov bx, prompt
   call print
-  mov bx, bufflen
-  mov ah, 0
-  mov [bx], ah
+  mov dl, 0
 
   mov bx, cmdbuffer - 1
   mov ah, 0
@@ -67,14 +65,11 @@ readloop:
   jmp readloop
 
 charpressed:
-  mov ah, [bufflen]
-  cmp ah, 5
+  cmp dl, 5
   je readloop
-  inc ah
-  mov bx, bufflen
-  mov [bx], ah
+  inc dl
   mov bx, cmdbuffer
-  add bx, [bufflen]
+  call addbxdl
   mov al, [char]
   mov [bx], al
   mov al, [bx]
@@ -101,16 +96,22 @@ backspace:
   mov ah, [posinline]
   dec ah
   mov [bx], ah 
-  mov ah, [bufflen]
   mov bx, cmdbuffer
-  add bx, [bufflen]
+  call addbxdl
   mov al, 0
   mov [bx], al
-  dec ah
-  mov bx, bufflen
-  mov [bx], ah
+  dec dl
 
   jmp readloop
+
+addbxdl:
+  mov ah, 0
+addbxdl1:
+  cmp ah, dl
+  je return
+  inc bx
+  inc ah
+  jmp addbxdl1
 
 char:
   db 0
@@ -233,11 +234,8 @@ helptxt:
   db "CMDs", 0x0d, 0x0a, "clear", 0x0d, 0x0a, "btc", 0x0d, 0x0a, "help", 0
 btcaddr:
   db "1Q4Ba61mT7C6EtMRSyDj6HSxPsxXkgLPU3", 0
-  db 0
 cmd3:
   db "btc", 0
-bufflen:
-  db 0
 cmdbuffer:
   db 0, "clear", 0
 posinline:
