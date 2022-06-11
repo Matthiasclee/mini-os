@@ -4,6 +4,8 @@ jmp main
 
 string1:
   db "ML", 0
+cmd1:
+  db "clear", 0
 prompt:
   db 0x0d, 0x0a, "> ", 0
 bufflen:
@@ -11,7 +13,8 @@ bufflen:
 zero:
   db 0
 cmdbuffer:
-  times 10 db 0
+  times 12 db 0
+afterbuffer:
 
 main:
   mov ax, 0
@@ -20,11 +23,31 @@ main:
   call print
 
 mainloop:
+  mov dh, 0
+  mov cx, cmdbuffer + 1
+  mov bx, cmd1
+  call checkifequal
+  cmp dh, 1
+  je reset
+continueaftercmd:
+
   mov bx, prompt
   call print
   mov bx, bufflen
   mov ah, [zero]
   mov [bx], ah
+
+  mov bx, cmdbuffer - 1
+  mov ah, [zero]
+  
+clearbuffer:
+  inc bx
+  cmp bx, afterbuffer
+  je continue
+  mov [bx], ah
+  jmp clearbuffer
+
+continue:
 
 readloop:
   call readchar
@@ -89,7 +112,49 @@ checkifcontainsfail:
   popa
   mov ah, 0
   ret
+
+reset:
+  mov ax, 0
+  int 0x10
+  mov bx, string1
+  call print
+  jmp continueaftercmd
   
+checkifequal:
+  mov dh, 1
+  jmp checkifequal2
+checkifequal1:
+  inc bx
+  inc cx
+checkifequal2:
+  mov ah, [bx]
+  push bx
+  mov bx, cx
+  mov al, [bx]
+  pop bx
+  cmp ah, 0
+  je checkifequalzeroah
+  cmp al, 0
+  je checkifequalzeroal
+  cmp ah, al
+  jne checkifequalfail
+  jmp checkifequal1
+checkifequalzeroah:
+  cmp al, 0
+  je return
+  mov dh, 0
+  ret
+checkifequalzeroal:
+  cmp ah, 0
+  je return
+  mov dh, 0
+  ret
+checkifequalfail:
+  mov dh, 0
+  ret
+
+return:
+  ret
 
 print:
   pusha
