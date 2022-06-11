@@ -1,36 +1,34 @@
 [org 0x7c00]
 
-jmp main
-
-string1:
-  db "ML", 0
-cmd1:
-  db "clear", 0
-prompt:
-  db 0x0d, 0x0a, "> ", 0
-bufflen:
-  db 0
-zero:
-  db 0
-cmdbuffer:
-  times 12 db 0
-afterbuffer:
-
 main:
-  mov ax, 0
-  int 0x10
-  mov bx, string1
-  call print
+  call reset
+  jmp continueaftercmd
 
 mainloop:
+  mov bx, newline
+  call print
   mov dh, 0
   mov cx, cmdbuffer + 1
   mov bx, cmd1
   call checkifequal
   cmp dh, 1
-  je reset
+  je reset1
+  mov cx, cmdbuffer + 1
+  mov bx, cmd2
+  call checkifequal
+  cmp dh, 1
+  je help
+  mov cx, cmdbuffer + 1
+  mov bx, cmd3
+  call checkifequal
+  cmp dh, 1
+  je btc
+  jmp badcommand
 continueaftercmd:
-
+  
+  mov bx, posinline
+  mov ah, [zero]
+  mov [bx], ah 
   mov bx, prompt
   call print
   mov bx, bufflen
@@ -53,13 +51,15 @@ readloop:
   call readchar
   mov bh, [char]
   mov ah, 32
-  mov al, 127
+  mov al, 126
   call checkifcontains
   cmp ah, 1
   je charpressed
   mov bh, [scancode]
-  cmp bh, 28 
+  cmp bh, 28
   je mainloop
+  cmp bh, 14
+  je backspace
   jmp readloop
 
 charpressed:
@@ -76,6 +76,36 @@ charpressed:
   mov al, [bx]
   mov ah, 0x0e
   int 0x10
+  mov ah, [posinline]
+  inc ah
+  mov bx, posinline
+  mov [bx], ah
+  jmp readloop
+
+backspace:
+  mov ah, [posinline]
+  cmp ah, 0
+  je readloop
+  mov ah, 0x0e
+  mov al, 0x08
+  int 0x10
+  mov al, 0
+  int 0x10
+  mov al, 0x08
+  int 0x10
+  mov bx, posinline
+  mov ah, [posinline]
+  dec ah
+  mov [bx], ah 
+  mov ah, [bufflen]
+  mov bx, cmdbuffer
+  add bx, [bufflen]
+  mov al, [zero]
+  mov [bx], al
+  dec ah
+  mov bx, bufflen
+  mov [bx], ah
+
   jmp readloop
 
 char:
@@ -113,10 +143,25 @@ checkifcontainsfail:
   mov ah, 0
   ret
 
+reset1:
+  call reset
+  jmp continueaftercmd
 reset:
   mov ax, 0
   int 0x10
   mov bx, string1
+  call print
+  ret
+badcommand:
+  mov bx, badcmd
+  call print
+  jmp continueaftercmd
+help:
+  mov bx, helptxt
+  call print
+  jmp continueaftercmd
+btc:
+  mov bx, btcaddr
   call print
   jmp continueaftercmd
   
@@ -142,13 +187,11 @@ checkifequal2:
 checkifequalzeroah:
   cmp al, 0
   je return
-  mov dh, 0
-  ret
+  jmp checkifequalfail
 checkifequalzeroal:
   cmp ah, 0
   je return
-  mov dh, 0
-  ret
+  jmp checkifequalfail
 checkifequalfail:
   mov dh, 0
   ret
@@ -157,8 +200,6 @@ return:
   ret
 
 print:
-  pusha
-print1:
   mov ah, 0x0e
   mov al, [bx]
   cmp al, 0
@@ -168,12 +209,41 @@ print1:
   int 0x10
   pop bx
   inc bx
-  jmp print1
+  jmp print
 exitprint:
-  popa
   ret
+
+string1:
+  db "ML", 0
+cmd1:
+  db "clear", 0
+cmd2:
+  db "help", 0
+prompt:
+  db 0x0d, 0x0a, "> ", 0
+newline:
+  db 0x0d, 0x0a, 0
+badcmd:
+  db "Bad command", 0
+helptxt:
+  db "Commands", 0x0d, 0x0a, "clear", 0x0d, 0x0a, "btc", 0
+btcaddr:
+  db "1Q4Ba61mT7C6EtMRSyDj6HSxPsxXkgLPU3", 0
+cmd3:
+  db "btc", 0
+bufflen:
+  db 0
+cmdbuffer:
+zero:
+  db 0
+  db "clear"
+  times 6 db 0
+posinline:
+  db 0
+afterbuffer:
 
 end:
   jmp $
-  times 510-($-$$) db 0
+  times 448-($-$$) db 0
+  times 62 db 0
   db 0x55, 0xaa
