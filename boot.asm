@@ -1,17 +1,38 @@
 [org 0x7c00]
 
 main:
+  ; load more data
+  ;where to put the data
+  mov ax, 0
+  mov es, ax ;es can not be set directly
+  mov bx, 0x7e00
+  mov ah, 2
+  ;mov al, 1 ;sectors to load
+  mov al, 2 ;sectors to load
+  mov ch, 0 ;cylinder number
+  mov cl, 2 ;sector number
+  mov dh, 0 ;head number
+  int 0x13
+  
+  
   call reset
   jmp continueaftercmd
 
+endsector1:
+  jmp $
+  times 446-($-$$) db 0
+  times 64 db 0
+  db 0x55, 0xaa
+
 mainloop:
-  mov bx, newline
-  call print
-  mov dh, 0
   mov cx, cmdbuffer + 1
   mov bx, string1 + 2
   call checkifequal
+  cmp dh, 1
   je continueaftercmd
+  mov bx, newline
+  call print
+  mov dh, 0
   mov cx, cmdbuffer + 1
   mov bx, cmd1
   call checkifequal
@@ -35,7 +56,9 @@ continueaftercmd:
   mov [bx], ah 
   mov bx, prompt
   call print
-  mov dl, 0
+  mov bx, bufflen
+  mov ah, 0
+  mov [bx], ah
 
   mov bx, cmdbuffer - 1
   mov ah, 0
@@ -65,11 +88,14 @@ readloop:
   jmp readloop
 
 charpressed:
-  cmp dl, 5
+  mov ah, [bufflen]
+  cmp ah, 10
   je readloop
-  inc dl
+  inc ah
+  mov bx, bufflen
+  mov [bx], ah
   mov bx, cmdbuffer
-  call addbxdl
+  add bx, [bufflen]
   mov al, [char]
   mov [bx], al
   mov al, [bx]
@@ -96,22 +122,16 @@ backspace:
   mov ah, [posinline]
   dec ah
   mov [bx], ah 
+  mov ah, [bufflen]
   mov bx, cmdbuffer
-  call addbxdl
+  add bx, [bufflen]
   mov al, 0
   mov [bx], al
-  dec dl
+  dec ah
+  mov bx, bufflen
+  mov [bx], ah
 
   jmp readloop
-
-addbxdl:
-  mov ah, 0
-addbxdl1:
-  cmp ah, dl
-  je return
-  inc bx
-  inc ah
-  jmp addbxdl1
 
 char:
   db 0
@@ -229,22 +249,22 @@ prompt:
 newline:
   db 0x0d, 0x0a, 0
 badcmd:
-  db "Err", 0
+  db "Invalid command - type 'help' for command list", 0
 helptxt:
-  db "CMDs", 0x0d, 0x0a, "clear", 0x0d, 0x0a, "btc", 0x0d, 0x0a, "help", 0
+  db "Commands", 0x0d, 0x0a, "clear", 0x0d, 0x0a, "btc", 0x0d, 0x0a, "help", 0
 btcaddr:
   db "1Q4Ba61mT7C6EtMRSyDj6HSxPsxXkgLPU3", 0
 cmd3:
   db "btc", 0
+bufflen:
+  db 0
 cmdbuffer:
-  db 0, "clear", 0
+  db 0, "clear"
+  times 6 db 0
 posinline:
   db 0
 afterbuffer:
 
-end:
+endsector2:
   jmp $
-  ;times 510-($-$$) db 0
-  times 446-($-$$) db 0
-  times 64 db 0
-  db 0x55, 0xaa
+  times 1536-($-$$) db 0
