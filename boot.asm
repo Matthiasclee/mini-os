@@ -12,8 +12,7 @@ main:
   mov cl, 2 ;sector number
   mov dh, 0 ;head number
   int 0x13
-  
-  
+
   call reset
   jmp continueaftercmd
 
@@ -47,6 +46,11 @@ mainloop:
   call checkifequal
   cmp dh, 1
   je btc
+  mov cx, cmdbuffer + 1
+  mov bx, haltcmd
+  call checkifequal
+  cmp dh, 1
+  je haltcpu
   jmp badcommand
 continueaftercmd:
   
@@ -189,6 +193,11 @@ btc:
   mov bx, btcaddr
   call print
   jmp continueaftercmd
+haltcpu:
+  mov bx, halttext1
+  call print
+  cli
+  hlt
   
 checkifequal:
   mov dh, 1
@@ -251,11 +260,15 @@ newline:
 badcmd:
   db "Invalid command - type 'help' for command list", 0
 helptxt:
-  db "Commands", 0x0d, 0x0a, "clear", 0x0d, 0x0a, "btc", 0x0d, 0x0a, "help", 0
+  db "Commands", 0x0d, 0x0a, "clear", 0x0d, 0x0a, "btc", 0x0d, 0x0a, "halt", 0x0d, 0x0a, "help", 0
 btcaddr:
   db "1Q4Ba61mT7C6EtMRSyDj6HSxPsxXkgLPU3", 0
 cmd3:
   db "btc", 0
+haltcmd:
+  db "halt", 0
+halttext1:
+  db "Disabling interrupts and halting CPU", 0x0d, 0x0a, 0
 bufflen:
   db 0
 cmdbuffer:
