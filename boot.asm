@@ -1,5 +1,15 @@
 [org 0x7c00]
 
+jmp main
+
+failcheck:
+  mov bx, failcheckstring
+  call print
+  cli
+  hlt
+failcheckstring:
+  db "Check failed. Halting CPU", 0
+
 main:
   ; load more data
   ;where to put the data
@@ -12,46 +22,111 @@ main:
   mov cl, 2 ;sector number
   mov dh, 0 ;head number
   int 0x13
+  
+  mov bx, check
+  mov ah, [bx]
+  cmp ah, 0x11
+  jne failcheck
+  mov bx, check + 1
+  mov ah, [bx]
+  cmp ah, 0x17
+  jne failcheck
+  mov bx, check + 2
+  mov ah, [bx]
+  cmp ah, 0x20
+  jne failcheck
+  mov bx, check + 3
+  mov ah, [bx]
+  cmp ah, 0x09
+  jne failcheck
 
   call reset
   jmp continueaftercmd
 
-endsector1:
-  jmp $
-  times 446-($-$$) db 0
-  times 64 db 0
-  db 0x55, 0xaa
+char:
+  db 0
+scancode:
+  db 0
 
-mainloop:
+checkifcommandequal:
   mov cx, cmdbuffer + 1
-  mov bx, string1 + 2
-  call checkifequal
-  cmp dh, 1
-  je continueaftercmd
-  mov bx, newline
-  call print
+checkifequal:
+  mov dh, 1
+  jmp checkifequal2
+checkifequal1:
+  inc bx
+  inc cx
+checkifequal2:
+  mov ah, [bx]
+  push bx
+  mov bx, cx
+  mov al, [bx]
+  pop bx
+  cmp ah, 0
+  je checkifequalzeroah
+  cmp al, 0
+  je checkifequalzeroal
+  cmp ah, al
+  jne checkifequalfail
+  jmp checkifequal1
+checkifequalzeroah:
+  cmp al, 0
+  je return
+  jmp checkifequalfail
+checkifequalzeroal:
+  cmp ah, 0
+  je return
+  jmp checkifequalfail
+checkifequalfail:
   mov dh, 0
-  mov cx, cmdbuffer + 1
-  mov bx, cmd1
-  call checkifequal
-  cmp dh, 1
-  je reset1
-  mov cx, cmdbuffer + 1
-  mov bx, cmd2
-  call checkifequal
-  cmp dh, 1
-  je help
-  mov cx, cmdbuffer + 1
-  mov bx, cmd3
-  call checkifequal
-  cmp dh, 1
-  je btc
-  mov cx, cmdbuffer + 1
-  mov bx, haltcmd
-  call checkifequal
-  cmp dh, 1
-  je haltcpu
-  jmp badcommand
+  ret
+
+return:
+  ret
+
+print:
+  mov ah, 0x0e
+  mov al, [bx]
+  cmp al, 0
+  je exitprint
+  push bx
+  mov bx, 0
+  int 0x10
+  pop bx
+  inc bx
+  jmp print
+exitprint:
+  ret
+
+checkifcontains:
+  pusha
+checkifcontains1:
+  cmp bh, ah
+  je checkifcontainssuccess
+  cmp ah, al
+  je checkifcontainsfail
+  inc ah
+  jmp checkifcontains1 
+checkifcontainssuccess:
+  popa
+  mov ah, 1
+  ret
+checkifcontainsfail:
+  popa
+  mov ah, 0
+  ret
+
+reset1:
+  call reset
+  jmp continueaftercmd
+reset:
+  mov ah, 0
+  mov al, 2
+  int 0x10
+  mov bx, string1
+  call print
+  ret
+
 continueaftercmd:
   
   mov bx, posinline
@@ -136,12 +211,6 @@ backspace:
 
   jmp readloop
 
-char:
-  db 0
-
-scancode:
-  db 0
-
 readchar:
   pusha
   mov ah, 0
@@ -153,34 +222,44 @@ readchar:
   popa
   ret
 
-checkifcontains:
-  pusha
-checkifcontains1:
-  cmp bh, ah
-  je checkifcontainssuccess
-  cmp ah, al
-  je checkifcontainsfail
-  inc ah
-  jmp checkifcontains1 
-checkifcontainssuccess:
-  popa
-  mov ah, 1
-  ret
-checkifcontainsfail:
-  popa
-  mov ah, 0
-  ret
+endsector1:
+  jmp $
+  times 446-($-$$) db 0
+  times 64 db 0
+  db 0x55, 0xaa
 
-reset1:
-  call reset
-  jmp continueaftercmd
-reset:
-  mov ah, 0
-  mov al, 2
-  int 0x10
-  mov bx, string1
+mainloop:
+  mov bx, string1 + 2
+  call checkifcommandequal
+  cmp dh, 1
+  je continueaftercmd
+
+  mov bx, newline
   call print
-  ret
+  mov dh, 0
+
+  mov bx, cmd1
+  call checkifcommandequal
+  cmp dh, 1
+  je reset1
+
+  mov bx, cmd2
+  call checkifcommandequal
+  cmp dh, 1
+  je help
+
+  mov bx, cmd3
+  call checkifcommandequal
+  cmp dh, 1
+  je btc
+
+  mov bx, haltcmd
+  call checkifcommandequal
+  cmp dh, 1
+  je haltcpu
+
+  jmp badcommand
+
 badcommand:
   mov bx, badcmd
   call print
@@ -199,54 +278,6 @@ haltcpu:
   cli
   hlt
   
-checkifequal:
-  mov dh, 1
-  jmp checkifequal2
-checkifequal1:
-  inc bx
-  inc cx
-checkifequal2:
-  mov ah, [bx]
-  push bx
-  mov bx, cx
-  mov al, [bx]
-  pop bx
-  cmp ah, 0
-  je checkifequalzeroah
-  cmp al, 0
-  je checkifequalzeroal
-  cmp ah, al
-  jne checkifequalfail
-  jmp checkifequal1
-checkifequalzeroah:
-  cmp al, 0
-  je return
-  jmp checkifequalfail
-checkifequalzeroal:
-  cmp ah, 0
-  je return
-  jmp checkifequalfail
-checkifequalfail:
-  mov dh, 0
-  ret
-
-return:
-  ret
-
-print:
-  mov ah, 0x0e
-  mov al, [bx]
-  cmp al, 0
-  je exitprint
-  push bx
-  mov bx, 0
-  int 0x10
-  pop bx
-  inc bx
-  jmp print
-exitprint:
-  ret
-
 string1:
   db "ML", 0
 cmd1:
@@ -280,4 +311,7 @@ afterbuffer:
 
 endsector2:
   jmp $
-  times 1536-($-$$) db 0
+  times 1532-($-$$) db 0
+
+check:
+  db 0x11, 0x17, 0x20, 0x09
