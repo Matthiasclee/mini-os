@@ -248,30 +248,15 @@ mainloop:
   cmp dh, 1
   je help
 
-  mov bx, cmd3
-  call checkifcommandequal
-  cmp dh, 1
-  je btc
-
   mov bx, haltcmd
   call checkifcommandequal
   cmp dh, 1
   je haltcpu
 
-  mov bx, shutdowncmd
-  call checkifcommandequal
-  cmp dh, 1
-  je shutdown
-
   mov bx, cmdbuffer + 1
   mov al, '~'
   cmp [bx], al
   je rawjump
-
-  mov bx, printallcharscmd
-  call checkifcommandequal
-  cmp dh, 1
-  je printallchars
 
   jmp badcommand
 
@@ -283,35 +268,11 @@ help:
   mov bx, helptxt
   call print
   jmp continueaftercmd
-btc:
-  mov bx, btcaddr
-  call print
-  jmp continueaftercmd
 haltcpu:
   mov bx, halttext1
   call print
   cli
   hlt
-shutdown:
-  mov bx, shutdowntxt1
-  call print
-  mov ax, 0x5307
-  mov bx, 0x0001
-  mov cx, 0x0003
-  int 0x15
-  mov bx, shutdownfailtxt
-  call print
-  cli
-  hlt
-printallchars:
-  mov al, 0
-printallchars1:
-  mov ah, 0x0e
-  int 0x10
-  cmp al, 0xff
-  inc al
-  je continueaftercmd
-  jmp printallchars1
 rawjump:
   mov bx, cmdbuffer + 2
   mov al, [bx]
@@ -344,21 +305,9 @@ newline:
 badcmd:
   db "Invalid command - type 'help' for command list", 0
 helptxt:
-  db "Commands", 0x0d, 0x0a, "clear", 0x0d, 0x0a, "shutdown", 0x0d, 0x0a, "printall", 0x0d, 0x0a, "halt", 0x0d, 0x0a, "help", 0
-btcaddr:
-  db "1Q4Ba61mT7C6EtMRSyDj6HSxPsxXkgLPU3", 0
-cmd3:
-  db "btc", 0
+  db "Commands", 0x0d, 0x0a, "clear", 0x0d, 0x0a, "halt", 0x0d, 0x0a, "help", 0
 haltcmd:
   db "halt", 0
-shutdowncmd:
-  db "shutdown", 0
-printallcharscmd:
-  db "printall", 0
-shutdowntxt1:
-  db "Shutting down...", 0
-shutdownfailtxt:
-  db "Failed to shut down. Halting CPU", 0
 halttext1:
   db "Disabling interrupts and halting CPU", 0x0d, 0x0a, 0
 bufflen:
