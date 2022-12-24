@@ -1,3 +1,5 @@
+%include "addons/os_addons.asm"
+
 call reset
 jmp mainloop
 
