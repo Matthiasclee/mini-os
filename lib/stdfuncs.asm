@@ -1,3 +1,8 @@
+char:
+  db 0
+scancode:
+  db 0
+
 print:
   mov ah, 0x0e
   mov al, [bx]

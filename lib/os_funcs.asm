@@ -9,11 +9,6 @@ posinline:
   db 0
 afterbuffer:
 
-char:
-  db 0
-scancode:
-  db 0
-
 checkifcommandequal:
   mov cx, cmdbuffer + 1
   call checkifequal
