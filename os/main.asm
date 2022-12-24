@@ -25,15 +25,6 @@ badcommand:
   mov bx, badcmd
   call print
   jmp continueaftercmd
-help:
-  mov bx, helptxt
-  call print
-  jmp continueaftercmd
-haltcpu:
-  mov bx, halttext1
-  call print
-  cli
-  hlt
 rawjump:
   mov bx, cmdbuffer + 2
   mov al, [bx]

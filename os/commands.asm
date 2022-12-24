@@ -1,6 +1,7 @@
 jmp commands
 %include "os/command_names.asm"
 %include "os/command_text.asm"
+%include "os/command_code.asm"
 
 commands:
   mov bx, clearcmd
