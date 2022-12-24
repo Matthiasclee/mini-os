@@ -1,5 +1,7 @@
 jmp commands
-%include "os/command_strings.asm"
+%include "os/command_names.asm"
+%include "os/command_text.asm"
+
 commands:
   mov bx, clearcmd
   call checkifcommandequal
@@ -15,5 +17,3 @@ commands:
   call checkifcommandequal
   cmp dh, 1
   je haltcpu
-
-
