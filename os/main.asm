@@ -56,8 +56,3 @@ newline:
   db 0x0d, 0x0a, 0
 badcmd:
   db "Invalid command - type 'help' for command list", 0
-
-endsector2:
-  jmp $
-  times 1532-($-$$) db 0
-

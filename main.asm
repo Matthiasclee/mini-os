@@ -3,3 +3,8 @@
 %include "boot/boot.asm"
 %include "os/main.asm"
 
+endsector3:
+  jmp $
+  times 2046-($-$$) db 0
+check:
+  db 0xFF

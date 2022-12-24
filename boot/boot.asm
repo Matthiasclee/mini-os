@@ -9,13 +9,17 @@ main:
   mov es, ax ;es can not be set directly
   mov bx, 0x7e00
   mov ah, 2
-  mov al, 2 ;sectors to load
+  mov al, 3 ;sectors to load
   mov ch, 0 ;cylinder number
   mov cl, 2 ;sector number
   mov dh, 0 ;head number
   int 0x13
 
-jmp beginnext
+  mov ah, [check]
+  cmp ah, 0xFF
+  je beginnext
+
+;jmp beginnext
 
 endsector1:
   jmp $
