@@ -1,7 +1,9 @@
 call reset
+jmp mainloop
+
 
 mainloop:
-  mov bx, string1 + 2
+  mov bx, zero
   call checkifcommandequal
   cmp dh, 1
   je continueaftercmd
@@ -10,20 +12,7 @@ mainloop:
   call print
   mov dh, 0
 
-  mov bx, cmd1
-  call checkifcommandequal
-  cmp dh, 1
-  je reset1
-
-  mov bx, cmd2
-  call checkifcommandequal
-  cmp dh, 1
-  je help
-
-  mov bx, haltcmd
-  call checkifcommandequal
-  cmp dh, 1
-  je haltcpu
+  %include "os/commands.asm"
 
   mov bx, cmdbuffer + 1
   mov al, '~'
@@ -64,12 +53,10 @@ rawjump:
   je badcommand
   jmp continueaftercmd
 
+zero:
+  db 0
 string1:
   db "ML", 0
-cmd1:
-  db "clear", 0
-cmd2:
-  db "help", 0
 prompt:
   db 0x0d, 0x0a, "> ", 0
 newline:
@@ -78,8 +65,6 @@ badcmd:
   db "Invalid command - type 'help' for command list", 0
 helptxt:
   db "Commands", 0x0d, 0x0a, "clear", 0x0d, 0x0a, "halt", 0x0d, 0x0a, "help", 0
-haltcmd:
-  db "halt", 0
 halttext1:
   db "Disabling interrupts and halting CPU", 0x0d, 0x0a, 0
 
