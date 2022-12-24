@@ -18,3 +18,5 @@ commands:
   call checkifcommandequal
   cmp dh, 1
   je haltcpu
+
+  %include "addons/addons.asm"
