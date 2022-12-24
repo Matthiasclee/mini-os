@@ -90,7 +90,7 @@ rawjump:
   cmp al, 0
   je badcommand
   jmp continueaftercmd
-  
+
 string1:
   db "ML", 0
 cmd1:
@@ -109,18 +109,7 @@ haltcmd:
   db "halt", 0
 halttext1:
   db "Disabling interrupts and halting CPU", 0x0d, 0x0a, 0
-bufflen:
-  db 0
-cmdbuffer:
-  db 0, "clear"
-  times 26 db 0
-posinline:
-  db 0
-afterbuffer:
 
 endsector2:
   jmp $
   times 1532-($-$$) db 0
-
-check:
-  db 0x11, 0x17, 0x20, 0x09

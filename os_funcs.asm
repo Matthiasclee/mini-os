@@ -1,3 +1,12 @@
+bufflen:
+  db 0
+cmdbuffer:
+  db 0, "clear"
+  times 26 db 0
+posinline:
+  db 0
+afterbuffer:
+
 char:
   db 0
 scancode:
