@@ -1,1 +1,1 @@
-nasm -f bin boot.asm -o boot.bin
+nasm -f bin main.asm -o main.bin

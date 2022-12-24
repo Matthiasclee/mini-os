@@ -1,31 +1,4 @@
-[org 0x7c00]
-
-jmp main
-
-%include "stdfuncs.asm"
-%include "os_funcs.asm"
-
-main:
-  ; load more data
-  ;where to put the data
-  mov ax, 0
-  mov es, ax ;es can not be set directly
-  mov bx, 0x7e00
-  mov ah, 2
-  mov al, 2 ;sectors to load
-  mov ch, 0 ;cylinder number
-  mov cl, 2 ;sector number
-  mov dh, 0 ;head number
-  int 0x13
-
-  call reset
-  jmp continueaftercmd
-
-endsector1:
-  jmp $
-  times 446-($-$$) db 0
-  times 64 db 0
-  db 0x55, 0xaa
+call reset
 
 mainloop:
   mov bx, string1 + 2
@@ -113,3 +86,4 @@ halttext1:
 endsector2:
   jmp $
   times 1532-($-$$) db 0
+

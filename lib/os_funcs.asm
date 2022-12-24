@@ -1,3 +1,5 @@
+%include "lib/stdfuncs.asm"
+
 bufflen:
   db 0
 cmdbuffer:
