@@ -5,6 +5,6 @@
 
 endsector3:
   jmp $
-  times 2046-($-$$) db 0
+  times 2047-($-$$) db 0
 check:
   db 0xFF
