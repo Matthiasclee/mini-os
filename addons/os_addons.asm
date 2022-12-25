@@ -1,3 +1,3 @@
 ; DECLARE OS ADDONS HERE
 
-%include "addons/selector/addon.asm"
+; %include "addons/selector/addon.asm"
