@@ -8,3 +8,7 @@ endsector3:
   times 2047-($-$$) db 0
 check:
   db 0xFF
+
+storagespace:
+  times 512 db 0
+edsend:
