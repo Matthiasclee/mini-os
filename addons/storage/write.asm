@@ -1,4 +1,4 @@
-write:
+write_to_storage:
   ;where to put the data
   mov ax, 0
   mov es, ax ;es can not be set directly
