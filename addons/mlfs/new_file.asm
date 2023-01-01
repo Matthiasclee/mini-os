@@ -39,13 +39,13 @@ new_file:
   je out_of_tablespace
 
   ; Write new file to table
-  mov ah, "A" ; File name
+  mov ah, [fname] ; File name
   mov [bx], ah
   inc bx
-  mov ah, "B"
+  mov ah, [fname + 1]
   mov [bx], ah
   inc bx
-  mov ah, "C"
+  mov ah, [fname + 2]
   mov [bx], ah
   inc bx
   mov ah, 0
