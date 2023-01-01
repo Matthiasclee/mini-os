@@ -13,5 +13,12 @@ mov bx, flength
 mov [bx], ch
 
 call new_file
+
+mov ch, 0x10
+mov bx, flength
+mov [bx], ch
+
+call new_file
+
 call write_to_storage
 
