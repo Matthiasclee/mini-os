@@ -4,5 +4,8 @@ jmp after_mlfs_loaded
 after_mlfs_loaded:
 
 ;call setup_mlfs_structure
+mov ch, 0x44
+
 call new_file
 call write_to_storage
+
