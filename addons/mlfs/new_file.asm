@@ -70,5 +70,19 @@ new_file:
   add ah, 8
   mov [bx], ah
 
+  ; Write to file
+  mov bx, cx
+  mov ah, 0
+  mov al, [flength]
+  add cx, ax
+  sub cx, 1
+  mov ah, [flength]
+  writefileloop:
+  mov [bx], ah
+  cmp bx, cx
+  je out_of_tablespace
+  inc bx
+  jmp writefileloop
+
 out_of_tablespace:
   ret 
