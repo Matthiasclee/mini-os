@@ -57,7 +57,8 @@ new_file:
   mov [bx], cl
   inc bx
 
-  mov [bx], ch ; Length
+  mov ah, [flength]
+  mov [bx], ah ; Length
   inc bx
   
   mov ah, 0 ; End entry
