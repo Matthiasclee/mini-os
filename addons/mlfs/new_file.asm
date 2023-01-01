@@ -11,6 +11,7 @@ new_file:
 
   ; Get location of file
   filesexist:
+  mov al, [bx]
   sub al, 3
   mov ah, 0
   mov bx, storagespace
