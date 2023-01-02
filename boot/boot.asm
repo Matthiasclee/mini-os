@@ -19,8 +19,6 @@ main:
   cmp ah, 0xFF
   je beginnext
 
-;jmp beginnext
-
 endsector1:
   jmp $
   times 510-($-$$) db 0
