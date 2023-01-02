@@ -5,16 +5,22 @@ flength:
 db 0x00
 fname:
 db 0x00, 0x00, 0x00
+fdataddr:
+db 0x00, 0x00
+flocaddr:
+db 0x00, 0x00
+fdat:
+db "Hello, This is very cool!!"
 after_mlfs_loaded:
 
 ;call setup_mlfs_structure
-mov ch, 0x44
-mov bx, flength
-mov [bx], ch
+mov ax, fdat
+mov bx, fdataddr
+mov [bx], ah
+inc bx
+mov [bx], al
 
-call new_file
-
-mov ch, 0x10
+mov ch, 25
 mov bx, flength
 mov [bx], ch
 

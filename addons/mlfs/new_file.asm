@@ -76,13 +76,34 @@ new_file:
   mov al, [flength]
   add cx, ax
   sub cx, 1
-  mov ah, [flength]
+
+  ; Back up registers
+  push bx
+  mov bx, flocaddr
+  mov [bx], ch
+  inc bx
+  mov [bx], cl
+  pop bx
+
+  push dx
+  mov dx, 0
   writefileloop:
-  mov [bx], ah
+  mov ax, bx
+  mov bh, [fdataddr]
+  mov bl, [fdataddr + 1]
+  add bx, dx
+  mov ch, [bx]
+  mov bx, ax
+  mov [bx], ch
+  
+  mov ch, [flocaddr]
+  mov cl, [flocaddr+1]
   cmp bx, cx
   je out_of_tablespace
   inc bx
+  inc dx
   jmp writefileloop
 
 out_of_tablespace:
+  pop dx
   ret 
