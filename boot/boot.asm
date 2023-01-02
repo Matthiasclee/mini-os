@@ -23,8 +23,7 @@ main:
 
 endsector1:
   jmp $
-  times 446-($-$$) db 0
-  times 64 db 0
+  times 510-($-$$) db 0
   db 0x55, 0xaa
 
 beginnext:
