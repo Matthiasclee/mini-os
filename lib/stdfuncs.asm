@@ -19,52 +19,52 @@ exitprint:
 
 checkifcontains:
   pusha
-checkifcontains1:
-  cmp bh, ah
-  je checkifcontainssuccess
-  cmp ah, al
-  je checkifcontainsfail
-  inc ah
-  jmp checkifcontains1 
-checkifcontainssuccess:
-  popa
-  mov ah, 1
-  ret
-checkifcontainsfail:
-  popa
-  mov ah, 0
-  ret
+  .checkifcontains1:
+    cmp bh, ah
+    je .checkifcontainssuccess
+    cmp ah, al
+    je .checkifcontainsfail
+    inc ah
+    jmp .checkifcontains1
+  .checkifcontainssuccess:
+    popa
+    mov ah, 1
+    ret
+  .checkifcontainsfail:
+    popa
+    mov ah, 0
+    ret
 
 checkifequal:
   mov dh, 1
-  jmp checkifequal2
-checkifequal1:
-  inc bx
-  inc cx
-checkifequal2:
-  mov ah, [bx]
-  push bx
-  mov bx, cx
-  mov al, [bx]
-  pop bx
-  cmp ah, 0
-  je checkifequalzeroah
-  cmp al, 0
-  je checkifequalzeroal
-  cmp ah, al
-  jne checkifequalfail
-  jmp checkifequal1
-checkifequalzeroah:
-  cmp al, 0
-  je return
-  jmp checkifequalfail
-checkifequalzeroal:
-  cmp ah, 0
-  je return
-  jmp checkifequalfail
-checkifequalfail:
-  mov dh, 0
-  ret
+  jmp .checkifequal2
+  .checkifequal1:
+    inc bx
+    inc cx
+  .checkifequal2:
+    mov ah, [bx]
+    push bx
+    mov bx, cx
+    mov al, [bx]
+    pop bx
+    cmp ah, 0
+    je .checkifequalzeroah
+    cmp al, 0
+    je .checkifequalzeroal
+    cmp ah, al
+    jne .checkifequalfail
+    jmp .checkifequal1
+  .checkifequalzeroah:
+    cmp al, 0
+    je return
+    jmp .checkifequalfail
+  .checkifequalzeroal:
+    cmp ah, 0
+    je return
+    jmp .checkifequalfail
+  .checkifequalfail:
+    mov dh, 0
+    ret
 
 return:
   ret
