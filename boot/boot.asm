@@ -1,10 +1,8 @@
 jmp bootloader
 
 bootloader_messages:
-  .init_message:
-    db "ML bootloader", 0x0d, 0x0a, 0
   .diskcheckfailed:
-    db "Error: disk check failed", 0
+    db "E:DCF", 0
 bootloader_checks:
   .diskcheckfailed:
     mov bx, bootloader_messages.diskcheckfailed
@@ -15,9 +13,6 @@ bootloader_checks:
 %include "lib/os_funcs.asm"
 
 bootloader:
-  mov bx, bootloader_messages.init_message
-  call print
-
   ; load more data
   ;where to put the data
   mov ax, 0
@@ -42,7 +37,7 @@ bootloader:
 
 endsector1:
   jmp $
-  times 500-($-$$) db 0
+  times 436-($-$$) db 0
   ; Boot flags
   boot_opts:
     .skipdatacheck:
@@ -57,6 +52,8 @@ endsector1:
     db 0x00
     db 0x00
     db 0x00
+
+  times 64 db 0
 
   ; Signature
   db 0x55, 0xaa
