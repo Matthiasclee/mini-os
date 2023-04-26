@@ -15,6 +15,7 @@ A 2.5kb OS written entirely in assembly
 `cat main.bin | lz4 -c | base64 | qrencode -o ml-os-qr.png`
 ### Reading a QR code
 From file: `zbarimg --raw ml-os-qr.png | base64 -d | lz4 -cd > qr.bin`
+<br>
 From camera: `zbarcam -1 --raw | base64 -d | lz4 -cd > qr.bin`
 
 
