@@ -10,7 +10,7 @@ bootloader_checks:
     cli
     hlt
 
-%include "lib/os_funcs.asm"
+%include "lib/stdfuncs.asm"
 
 bootloader:
   ; load more data

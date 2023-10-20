@@ -3,6 +3,8 @@
 call reset
 jmp mainloop
 
+%include "lib/os_funcs.asm"
+
 
 mainloop:
   mov bx, zero
