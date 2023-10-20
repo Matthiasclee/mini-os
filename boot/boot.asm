@@ -2,7 +2,7 @@ jmp bootloader
 
 bootloader_messages:
   .diskcheckfailed:
-    db "E:DCF", 0
+    db "Disk Check Failed.", 0
 bootloader_checks:
   .diskcheckfailed:
     mov bx, bootloader_messages.diskcheckfailed
