@@ -46,7 +46,8 @@ write_storage_code:
     int 0x10
     mov al, 0x08
     int 0x10
-    mov [bx], al
     dec bx
+    mov al, 0
+    mov [bx], al
     jmp write_storage_code.writeloop
     
