@@ -23,13 +23,26 @@ write_storage_code:
 
   .writeloop:
     call readchar
+
+    mov bh, [char]
+    mov ah, 32
+    mov al, 126
+    call checkifcontains
+    cmp ah, 1
+    je write_storage_code.wl_ischar
+
+    mov ah, 0x0e
     mov al, [scancode]
     cmp al, 28
-    je write_storage_code.save
+    je write_storage_code.saveandquit
     cmp al, 1
     je write_storage_code.exit
     cmp al, 14
     je write_storage_code.backspace
+    jmp write_storage_code.writeloop
+
+    .wl_ischar:
+    mov ah, 0x0e
     mov al, [char]
     
     int 0x10
