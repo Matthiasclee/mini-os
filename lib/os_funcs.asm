@@ -55,8 +55,6 @@ readloop:
   je mainloop
   cmp bh, 14
   je backspace
-  cmp bh, 1
-  call reset1
   jmp readloop
 
 charpressed:
