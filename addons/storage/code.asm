@@ -1,9 +1,14 @@
 print_storage_code:
+  mov bx, storagetext.print
+  call print
   mov bx, storagespace
   call print
   jmp continueaftercmd 
 
 write_storage_code:
+  mov bx, storagetext.writer
+  call print
+
   mov ah, 0x0e
   mov bx, storagespace
 
@@ -20,7 +25,9 @@ write_storage_code:
     call readchar
     mov al, [scancode]
     cmp al, 28
-    je write_storage_code.finish
+    je write_storage_code.save
+    cmp al, 1
+    je continueaftercmd
     cmp al, 14
     je write_storage_code.backspace
     mov al, [char]
@@ -32,14 +39,19 @@ write_storage_code:
     cmp bx, endstoragespace
     je write_storage_code.storagefull
     jmp write_storage_code.writeloop
-  .finish:
+  .saveandquit:
     call write_to_storage
     jmp continueaftercmd
+  .save:
+    call write_to_storage
+    jmp write_storage_code.writeloop
   .storagefull:
     mov bx, storagetext.full
     call print
-    jmp write_storage_code.finish
+    jmp write_storage_code.saveandquit
   .backspace:
+    cmp bx, storagespace
+    je write_storage_code.writeloop
     mov al, 0x08
     int 0x10
     mov al, 0
@@ -51,3 +63,14 @@ write_storage_code:
     mov [bx], al
     jmp write_storage_code.writeloop
     
+clear_storage_code:
+  mov bx, storagespace
+  mov ah, 0
+  .loop:
+    mov [bx], ah
+    inc bx
+    cmp bx, endstoragespace
+    jne clear_storage_code.loop
+  mov bx, storagetext.cleared
+  call print
+  jmp continueaftercmd

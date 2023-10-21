@@ -8,3 +8,8 @@ call checkifcommandequal
 cmp dh, 1
 je write_storage_code
 
+mov bx, clear_storage_command
+call checkifcommandequal
+cmp dh, 1
+je clear_storage_code
+
