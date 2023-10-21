@@ -76,6 +76,7 @@ clear_storage_code:
     inc bx
     cmp bx, endstoragespace
     jne clear_storage_code.loop
+  call write_to_storage
   mov bx, storagetext.cleared
   call print
   jmp continueaftercmd
