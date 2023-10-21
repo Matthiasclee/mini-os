@@ -7,6 +7,15 @@ write_storage_code:
   mov ah, 0x0e
   mov bx, storagespace
 
+  .printloop:
+    mov al, 0
+    cmp [bx], al
+    je write_storage_code.writeloop
+    mov al, [bx]
+    int 0x10
+    inc bx
+    jmp write_storage_code.printloop
+
   .writeloop:
     call readchar
     mov al, [scancode]
