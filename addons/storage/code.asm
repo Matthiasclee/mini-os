@@ -31,6 +31,7 @@ write_storage_code:
     je write_storage_code.exit
     cmp al, 14
     je write_storage_code.backspace
+
     mov al, [char]
     
     int 0x10
