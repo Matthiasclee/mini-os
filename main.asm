@@ -11,3 +11,4 @@ check:
 
 storagespace:
   times 512 db 0
+endstoragespace:
