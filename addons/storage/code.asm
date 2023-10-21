@@ -27,7 +27,7 @@ write_storage_code:
     cmp al, 28
     je write_storage_code.save
     cmp al, 1
-    je continueaftercmd
+    je write_storage_code.exit
     cmp al, 14
     je write_storage_code.backspace
     mov al, [char]
@@ -39,9 +39,6 @@ write_storage_code:
     cmp bx, endstoragespace
     je write_storage_code.storagefull
     jmp write_storage_code.writeloop
-  .saveandquit:
-    call write_to_storage
-    jmp continueaftercmd
   .save:
     call write_to_storage
     jmp write_storage_code.writeloop
@@ -49,6 +46,12 @@ write_storage_code:
     mov bx, storagetext.full
     call print
     jmp write_storage_code.saveandquit
+  .saveandquit:
+    call write_to_storage
+  .exit:
+    mov dh, 0x55 ; code to return after
+    call load_storagedata ; load storage data from disk
+    jmp continueaftercmd
   .backspace:
     cmp bx, storagespace
     je write_storage_code.writeloop
