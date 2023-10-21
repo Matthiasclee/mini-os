@@ -1,2 +1,4 @@
 print_storage_command:
-  db "printdat", 0
+  db "printstorage", 0
+write_storage_command:
+  db "writestorage", 0
