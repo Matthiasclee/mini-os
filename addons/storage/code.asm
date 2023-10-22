@@ -33,6 +33,18 @@ write_storage_code:
     je write_storage_code.backspace
 
     mov al, [char]
+
+    pusha
+
+    mov bh, [char]
+    mov ah, 32
+    mov al, 126
+    call checkifcontains
+    cmp ah, 1
+
+    popa
+
+    jne write_storage_code.writeloop
     
     int 0x10
 
