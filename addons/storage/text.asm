@@ -7,3 +7,5 @@ storagetext:
     db 0x0d, 0x0a, "Storage space full", 0
   .cleared:
     db "Storage cleared", 0
+  .reloaded:
+    db "Storage reloaded", 0

@@ -1,12 +1,11 @@
-%include "addons/os_addons.asm"
-
 call reset
 jmp mainloop
 
-%include "lib/os_funcs.asm"
-
+%include "lib/terminal/terminal.asm"
 
 mainloop:
+
+
   mov bx, zero
   call checkifcommandequal
   cmp dh, 1
@@ -18,40 +17,17 @@ mainloop:
 
   %include "os/commands.asm"
 
-  mov bx, cmdbuffer + 1
-  mov al, '~'
-  cmp [bx], al
-  je rawjump
-
   jmp badcommand
 
 badcommand:
   mov bx, badcmd
   call print
   jmp continueaftercmd
-rawjump:
-  mov bx, cmdbuffer + 2
-  mov al, [bx]
-  cmp al, 0
-  je badcommand
-  mov bx, cmdbuffer + 3
-  mov al, [bx]
-  cmp al, 0
-  je badcommand
-  mov bx, cmdbuffer + 4
-  mov al, [bx]
-  cmp al, 0
-  je badcommand
-  mov bx, cmdbuffer + 5
-  mov al, [bx]
-  cmp al, 0
-  je badcommand
-  jmp continueaftercmd
 
 zero:
   db 0
 string1:
-  db "ML", 0
+  db "", 0
 prompt:
   db 0x0d, 0x0a, "> ", 0
 newline:

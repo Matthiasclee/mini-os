@@ -92,3 +92,10 @@ clear_storage_code:
   mov bx, storagetext.cleared
   call print
   jmp continueaftercmd
+
+reload_storage_code:
+  mov dh, 0x55 ; code to return after
+  call load_storagedata ; load storage data from disk
+  mov bx, storagetext.reloaded
+  call print
+  jmp continueaftercmd
