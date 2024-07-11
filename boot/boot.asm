@@ -3,19 +3,14 @@ jmp bootloader
 %include "lib/std_functions/std_functions.asm"
 
 bootloader:
-  ; load more data
-  ;where to put the data
-  pusha
-  mov ax, 0
-  mov es, ax ;es can not be set directly
   mov bx, 0x7e00
-  mov ah, 2
-  mov al, [.loadsectors] ;sectors to load
-  mov ch, 0 ;cylinder number
-  mov cl, 2 ;sector number
-  mov dh, 0 ;head number
-  int 0x13
-  popa
+  mov al, [.loadsectors]
+  mov cl, 2
+  mov ch, 0
+  mov dh, 0
+  mov dl, 0x80
+
+  call std.read_from_drive
 
   jmp [.entrypoint]
 
