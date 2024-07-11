@@ -1,1 +1,1 @@
-%include "lib/commands/jump_if_command_equal.asm"
+%include "lib/commands/check_if_command_equal.asm"

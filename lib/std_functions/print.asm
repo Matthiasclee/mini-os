@@ -1,7 +1,23 @@
 ; Print string to screen
 ; Arguments:
-;   bx: address of string to print, string must end in 0x00
+;   bx: address of string to print, string must end in 0x0
 ; Returns: none
+
+; AH 0xAA AL 0xBB
+; JA 0xBB JB 0xAA
+
+std.print_with_newline:
+std.print_w_nl:
+std.printwnl:
+  call std.print
+  push ax
+  mov ah, 0x0e
+  mov al, 0x0d
+  int 0x10
+  mov al, 0x0a
+  int 0x10
+  pop ax
+  ret
 
 std.print:
   push ax
@@ -10,6 +26,7 @@ std.print:
 .loop:
   mov al, [bx]
   cmp al, 0
+  .jmp_op:
   je .exit
   int 0x10
   inc bx
