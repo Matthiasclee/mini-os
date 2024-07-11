@@ -2,7 +2,8 @@
 ; Arguments:
 ;   bx: command to check
 ;   cx: address to jump to if equal
-; Returns: none
+; Returns:
+;   cmp result
 
 commands.check_if_command_equal:
   push cx

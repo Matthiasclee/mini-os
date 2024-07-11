@@ -3,3 +3,4 @@
 %include "lib/terminal/reset.asm"
 %include "lib/terminal/command_buffer.asm"
 %include "lib/terminal/read_command.asm"
+%include "lib/terminal/main.asm"

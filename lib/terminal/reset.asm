@@ -2,7 +2,7 @@
 ; Arguments: none
 ; Returns: none
 
-terminal.clear:
+terminal.reset:
   push ax
   mov ah, 0
   mov al, 2
