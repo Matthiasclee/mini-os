@@ -22,7 +22,7 @@ bootloader:
   .loaddrive:
     db 0x80 ; Drive to load data from
   .loadsectors:
-    db 0x01 ; Number of sectors to load from disk
+    db 0x09 ; Number of sectors to load from disk
   .ignore_load_failure:
     db 0x00 ; Jump to entrypoint regardless of load failure
   .entrypoint:
