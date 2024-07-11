@@ -4,8 +4,6 @@
 ; Returns: none
 
 commands.check_commands:
-  mov bx, reset_text
-  call commands.check_if_command_equal
-  je reset
+  %include "lib/commands/additional_commands.asm"
 
   jmp commands.bad_command

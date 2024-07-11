@@ -9,8 +9,9 @@ terminal.after_command:
   call std.print
   call terminal.read_command
 
-  mov bx, terminal.text.null
-  call commands.check_if_command_equal
+  mov bx, terminal.cmd_buffer
+  mov bh, [bx]
+  cmp bh, 0
   je terminal.loop
 
   jmp commands.check_commands
