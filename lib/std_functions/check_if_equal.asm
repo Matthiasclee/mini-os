@@ -5,6 +5,7 @@
 ;   dh: result (0/1)
 
 std.check_if_equal:
+  push ax
   mov dh, 1
   jmp .do_comparison
   .loop_start:
@@ -30,8 +31,8 @@ std.check_if_equal:
   .al_null:
     cmp ah, 0
     je .success
-    jmp .fail
   .fail:
     mov dh, 0
   .success:
+    pop ax
     ret

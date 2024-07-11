@@ -2,7 +2,6 @@
 ; Arguments: none
 ; Returns:
 ;   [terminal.cmd_buffer]: command
-;   [terminal.cmd_buffer_length]: command length
 
 terminal.read_command:
   call terminal.clear_cmd_buffer
@@ -78,4 +77,8 @@ terminal.read_command:
   jmp .loop
 .done:
   pop dx
+  push bx
+  mov bx, terminal.ascii.crlf
+  call std.print
+  pop bx
   ret
