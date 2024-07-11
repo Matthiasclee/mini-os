@@ -6,5 +6,4 @@ jmp os.start
 %include "os/commands/all.asm"
 
 os.start:
-call terminal.reset
 jmp terminal.init
