@@ -5,7 +5,7 @@ jmp bootloader
 %include "lib/std_functions/std_functions.asm"
 
 bootloader:
-  mov bx, .end
+  mov bx, bootloader.end
   mov al, [.loadsectors]
   mov cl, 2 ; Sector #
   mov ch, 0 ; Cyl #
@@ -50,4 +50,4 @@ bootloader:
   .boot_singnature:
   db 0x55, 0xAA
 
-  .end:
+bootloader.end:
