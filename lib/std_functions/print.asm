@@ -3,9 +3,6 @@
 ;   bx: address of string to print, string must end in 0x0
 ; Returns: none
 
-; AH 0xAA AL 0xBB
-; JA 0xBB JB 0xAA
-
 std.print_with_newline:
 std.print_w_nl:
 std.printwnl:
