@@ -2,6 +2,8 @@
 %include "lib/std_functions/readchar.asm"
 %include "lib/std_functions/hex_to_ascii.asm"
 %include "lib/std_functions/dumpreg.asm"
+%include "lib/std_functions/cleanreg.asm"
 %include "lib/std_functions/check_in_range.asm"
 %include "lib/std_functions/check_if_equal.asm"
 %include "lib/std_functions/read_from_drive.asm"
+%include "lib/std_functions/write_to_drive.asm"

@@ -16,10 +16,8 @@ bootloader:
   jc .load_failed
 
   .jump_to_entrypoint:
+  call std.cleanreg
   jmp [.entrypoint]
-
-  .read_result_code:
-    db 0x00
 
   .loaddrive:
     db 0x80 ; Drive to load data from
@@ -40,12 +38,10 @@ bootloader:
     call std.printwnl
 
     call std.dumpreg
+    call std.readchar
+    jmp bootloader    
 
-    cli
-    hlt
   .load_failed_text: db "Failed to load sectors from disk.", 0
-  .ah_text: db "AH=", 0
-  .al_text: db "AL=", 0
 
   times 446-($-$$) db 0
 
