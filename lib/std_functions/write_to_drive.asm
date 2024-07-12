@@ -1,6 +1,6 @@
 ; Write sectors to drive
 ; Arguments:
-;   bx: address to store data at
+;   bx: address
 ;   al: number of sectors to write
 ;   cl: sector number
 ;   dl: drive number (see below)

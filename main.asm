@@ -22,13 +22,6 @@ os.address_table.get_address:
   ret
 
 entry_point:
-mov bx, end_os_space
-mov al, 1
-mov cl, 11
-mov dl, 0x80
-mov ch, 0
-mov dh, 0
-call std.read_from_drive
 %include "os/main.asm"
 
 cli
