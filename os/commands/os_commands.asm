@@ -27,3 +27,11 @@ je os.commands.call.code
 mov bx, os.commands.getaddr.name
 call commands.check_if_command_equal
 je os.commands.getaddr.code
+
+mov bx, os.commands.jumpaddr.name
+call commands.check_if_command_equal
+je os.commands.jumpaddr.code
+
+mov bx, os.commands.calladdr.name
+call commands.check_if_command_equal
+je os.commands.calladdr.code
