@@ -25,7 +25,7 @@ terminal.read_command:
   je .done
   cmp ah, [terminal.scancodes.backspace]
   ;je .backspace
-  je .ctrl_c
+  je .clear_backspace
   cmp al, [terminal.ascii.ctrl_c]
   je .ctrl_c
   jmp .loop
@@ -78,13 +78,21 @@ terminal.read_command:
   pop cx
 
   jmp .loop
+.clear_backspace:
+  pop dx
+  push bx
+  mov bx, terminal.text.null
+  call std.printwnl
+  pop bx
+  call terminal.clear_cmd_buffer
+  ret
 .ctrl_c:
   pop dx
   push bx
   mov bx, terminal.text.ctrl_c
   call std.printwnl
-  call terminal.after_command
   pop bx
+  call terminal.clear_cmd_buffer
   ret
 .done:
   pop dx
