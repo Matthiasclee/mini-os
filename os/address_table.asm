@@ -32,3 +32,4 @@ dw std.hex_to_ascii.tb_result_with_0x                ; 0x18 - hex to ascii resul
 dw std.ascii_to_hex.input                            ; 0x19 - ascii to hex input
 
 dw terminal.reset                                    ; 0x1A - reset terminal
+dw terminal.after_command                            ; 0x1B - continue after command

@@ -23,8 +23,8 @@ terminal.read_command:
 
   cmp ah, [terminal.scancodes.return]
   je .done
-  cmp ah, [terminal.scancodes.backspace]
-  je .backspace
+  cmp al, [terminal.ascii.ctrl_c]
+  je .ctrl_c
   jmp .loop
 .charpressed:
   ; Check if at end of line
@@ -75,6 +75,14 @@ terminal.read_command:
   pop cx
 
   jmp .loop
+.ctrl_c:
+  pop dx
+  push bx
+  mov bx, terminal.text.ctrl_c
+  call std.printwnl
+  call terminal.after_command
+  pop bx
+  ret
 .done:
   pop dx
   push bx

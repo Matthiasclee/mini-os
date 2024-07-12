@@ -35,3 +35,7 @@ je os.commands.jumpaddr.code
 mov bx, os.commands.calladdr.name
 call commands.check_if_command_equal
 je os.commands.calladdr.code
+
+mov bx, os.commands.readmem.name
+call commands.check_if_command_equal
+je os.commands.readmem.code
