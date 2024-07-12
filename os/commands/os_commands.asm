@@ -48,6 +48,6 @@ mov bx, os.commands.readdisk.name
 call commands.check_if_command_equal
 je os.commands.readdisk.code
 
-;mov bx, os.commands.writedisk.name
-;call commands.check_if_command_equal
-;je os.commands.writedisk.code
+mov bx, os.commands.writedisk.name
+call commands.check_if_command_equal
+je os.commands.writedisk.code

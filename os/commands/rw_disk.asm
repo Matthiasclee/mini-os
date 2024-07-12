@@ -10,6 +10,16 @@ os.commands.readdisk:
 
     jmp terminal.after_command
 
+os.commands.writedisk:
+  .name: db "writedisk", 0
+  .code:
+    call os.commands.readdisk.set_registers
+    call std.write_to_drive
+    call os.commands.readdisk.print_result
+    call std.cleanreg
+
+    jmp terminal.after_command
+
 os.commands.readdisk.print_result:
   call std.hex_to_ascii
   mov bx, os.commands.readdisk.text.sectors
