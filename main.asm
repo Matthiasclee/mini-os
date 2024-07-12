@@ -35,6 +35,7 @@ os.address_table.call_address:
 entry_point:
 %include "os/main.asm"
 
+cli
 hlt
 
 times (512*10)-($-$$) db 0 ; End OS code
