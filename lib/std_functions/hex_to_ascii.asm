@@ -1,7 +1,7 @@
 ; Convert hex values to ascii for printing
 ; Arguments:
 ;   al/ax: hex value
-;   [std.hex_to_ascii.two_bytes]: Convert two bytes
+;   std.hex_to_ascii.two_bytes: Convert two bytes
 ; Returns:
 ;   [std.hex_to_ascii.result]: result
 ;   [std.hex_to_ascii.result_with_0x]: result (starts with 0x)
