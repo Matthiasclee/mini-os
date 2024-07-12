@@ -9,12 +9,4 @@ jmp os.start
 %include "os/commands/all.asm"
 
 os.start:
-mov bx, terminal.text.prompt
-
-mov ax, 0x13
-call os.address_table.get_address
-
-call ax
-cli
-hlt
-;jmp terminal.init
+jmp terminal.init
