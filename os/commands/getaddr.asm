@@ -20,7 +20,7 @@ os.commands.jumpaddr:
     call os.address_table.get_address
     jmp ax
 
-; Jump to address from table
+; Call address from table
 os.commands.calladdr:
   .name: db "calladdr", 0
   .code:
