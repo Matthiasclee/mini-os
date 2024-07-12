@@ -1,6 +1,6 @@
 ; Read two-byte hex value from user
 ; Arguments:
-;   [std.read_hexval.single_byte]: Only read one byte
+;   std.read_hexval.single_byte: Only read one byte
 ; Returns:
 ;   cx: hex value
 

@@ -23,6 +23,9 @@ terminal.read_command:
 
   cmp ah, [terminal.scancodes.return]
   je .done
+  cmp ah, [terminal.scancodes.backspace]
+  ;je .backspace
+  je .ctrl_c
   cmp al, [terminal.ascii.ctrl_c]
   je .ctrl_c
   jmp .loop
@@ -68,7 +71,7 @@ terminal.read_command:
   ; Remove character from buffer
   dec dx
   mov bx, dx
-  mov al, 0
+  mov al, 0x00
   mov [bx], al
 
   pop bx
