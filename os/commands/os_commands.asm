@@ -19,3 +19,7 @@ je os.commands.dumpreg.code
 mov bx, os.commands.jump.name
 call commands.check_if_command_equal
 je os.commands.jump.code
+
+mov bx, os.commands.getaddr.name
+call commands.check_if_command_equal
+je os.commands.getaddr.code
