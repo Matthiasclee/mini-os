@@ -5,3 +5,9 @@ os.commands.jump:
   .code:
     call std.read_hexval
     jmp cx
+os.commands.call:
+  .name db "call", 0
+  .code:
+    call std.read_hexval
+    call cx
+    jmp terminal.after_command
