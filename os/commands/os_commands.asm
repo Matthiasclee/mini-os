@@ -15,3 +15,7 @@ je os.commands.reset.code
 mov bx, os.commands.dumpreg.name
 call commands.check_if_command_equal
 je os.commands.dumpreg.code
+
+mov bx, os.commands.jump.name
+call commands.check_if_command_equal
+je os.commands.jump.code
