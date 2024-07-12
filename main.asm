@@ -21,18 +21,14 @@ os.address_table.get_address:
   pop cx
   ret
 
-; Call function from address table
-; ALWAYS LOCATED AT 0x7E13
-; Arguments:
-;   ax: address/function number
-; Returns:
-;   ax: address or result from function
-os.address_table.call_address:
-  call os.address_table.get_address
-  call ax 
-  ret
-
 entry_point:
+mov bx, end_os_space
+mov al, 1
+mov cl, 11
+mov dl, 0x80
+mov ch, 0
+mov dh, 0
+call std.read_from_drive
 %include "os/main.asm"
 
 cli
