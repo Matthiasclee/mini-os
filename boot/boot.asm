@@ -38,10 +38,10 @@ bootloader:
     call std.printwnl
 
     call std.dumpreg
-    call std.readchar
-    jmp bootloader    
+    cli
+    hlt
 
-  .load_failed_text: db "Failed to load sectors from disk.", 0
+  .load_failed_text: db "Disk load failed.", 0
 
   times 446-($-$$) db 0
 

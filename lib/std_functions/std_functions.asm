@@ -6,4 +6,3 @@
 %include "lib/std_functions/check_in_range.asm"
 %include "lib/std_functions/check_if_equal.asm"
 %include "lib/std_functions/read_from_drive.asm"
-%include "lib/std_functions/write_to_drive.asm"

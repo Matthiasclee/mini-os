@@ -91,4 +91,5 @@ std.ascii_to_hex:
   .input: db "0"
   .input_second_chr:
     db "0"
+  .input_done:
   db 0
